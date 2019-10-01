@@ -1,0 +1,6 @@
+Population Size: 1000
+Vaccine Percentage: 0.9
+Virus Name = Smallpox
+Mortality Rate = 0.06
+Reproduction Rate = 0.15
+People Initially Infected: 20

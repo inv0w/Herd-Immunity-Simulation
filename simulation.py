@@ -4,6 +4,7 @@ import numpy as np
 from person import Person
 from logger import Logger
 from virus import Virus
+import textwrap
 
 class Simulation(object):
     ''' Main class that will run the herd immunity simulation program.
@@ -46,9 +47,12 @@ class Simulation(object):
         self.current_infected = 0 # Int
         self.vacc_percentage = vacc_percentage # float between 0 and 1
         self.total_dead = 0 # Int
-        # self.file_name = "{}_simulation_pop_{}_vp_{}_infected_{}.txt".format(
-        #     virus_name=, population_size, vacc_percentage, initial_infected)
+        self.file_name = "{}_simulation_pop_{}_vp_{}_infected_{}.txt".format(
+            virus_name, pop_size, vacc_percentage, initial_infected)
         self.newly_infected = []
+
+        self.logger.write_metadata(pop_size, vacc_percentage, virus_name,
+        mortality_rate, repro_num, initial_infected)
 
     def _create_population(self, initial_infected):
         '''This method will create the initial population.
@@ -80,7 +84,7 @@ class Simulation(object):
             if person._id in vacc_seeding: person.is_vaccinated = True
             if person._id in virus_seeding:
                 person.infection = self.virus
-                self.newly_infected.append(person)
+                self.newly_infected.append(person._id)
 
     def _simulation_should_continue(self):
         ''' The simulation should only end if the entire population is dead
@@ -91,8 +95,8 @@ class Simulation(object):
         '''
         # TODO: Complete this helper method.  Returns a Boolean.
         vacc_and_dead = self.total_dead
-        for i in range(self.pop_size):
-            if self.person.is_vaccinated == True: vacc_and_dead += 1
+        for person in self.population:
+            if person.is_vaccinated == True: vacc_and_dead += 1
 
         #If true that means the simulation should continue
         if vacc_and_dead != self.pop_size:
@@ -111,15 +115,15 @@ class Simulation(object):
         # HINT: You may want to call the logger's log_time_step() method at the end of each time step.
         # TODO: Set this variable using a helper
         time_step_counter = 0
-        should_continue = _simulation_should_continue
+        should_continue = self._simulation_should_continue()
 
-        while should_continue:
-            pass
+        # while should_continue:
+        #     pass
         # TODO: for every iteration of this loop, call self.time_step() to compute another
         # round of this simulation.
-            self.time_step()
-        print('The simulation has ended after {time_step_counter} turns.'.format(time_step_counter))
-        pass
+            # self.time_step()
+        # print('The simulation has ended after {time_step_counter} turns.'.format(time_step_counter))
+        # pass
 
     def time_step(self):
         ''' This method should contain all the logic for computing one time step
@@ -161,10 +165,16 @@ class Simulation(object):
             #     attribute can be changed to True at the end of the time step.
         # TODO: Call slogger method during this method.
         for i in self.population:
-            if random_person.is_vaccinated == True or random_person.infection != None:
-                pass
+            if random_person.is_vaccinated == True: 
+            elif random_person.infection != None:
+
             else:
-                death = random.random()
+                infect = random.random()
+                if infect < virus.repro_rate:
+                    self.newly_infected.append(person._id)
+
+            self.logger.log_interaction(person, random_person, random_person_sick=None,
+            random_person_vacc=None, did_infect=None)
 
 
     def _infect_newly_infected(self):
@@ -177,11 +187,11 @@ class Simulation(object):
 
 
 if __name__ == "__main__":
+    #python3 simulation.py Smallpox 0.15 0.06 1000 0.90 30
     params = sys.argv[1:]
     virus_name = str(params[0])
     repro_num = float(params[1])
     mortality_rate = float(params[2])
-
     pop_size = int(params[3])
     vacc_percentage = float(params[4])
 
@@ -190,7 +200,7 @@ if __name__ == "__main__":
     else:
         initial_infected = 1
 
-    virus = Virus(name, repro_rate, mortality_rate)
+    virus = Virus(virus_name, repro_num, mortality_rate)
     sim = Simulation(pop_size, vacc_percentage, initial_infected, virus)
 
     sim.run()
