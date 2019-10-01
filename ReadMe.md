@@ -14,22 +14,23 @@ This ReadMe (project description and specs) is a draft to help you get started o
 ### Rules
 
 1. A sick person only has a chance at infecting healthy, unvaccinated people they encounter.  
-1. An infected person cannot infect a vaccinated person.  This still counts as an interaction.  
-1. An infected person cannot infect someone that is already infected.  This still counts as an interaction.
-1. At the end of a time step, an infected person will either die of the infection or get better.  The chance they will die is the percentage chance stored in mortality_rate.  
-1. For simplicity's sake, if the person does not die, we will consider them immune to the virus and change is_vaccinated to True when this happens.  
-1. Dead people can no longer be infected, either.  Any time an individual dies, we should also change their .infected attribute to False.  
-1. All state changes for a person should occur at the **end** of a time step, after all infected persons have finished all of their interactions.  
-1. During the interactions, make note of any new individuals infected on this turn.  After the interactions are over, we will change the .infected attribute of all newly infected individuals to True.  1. Resolve the states of all individuals that started the turn infected by determining if they die or survive the infection, and change the appropriate attributes.  
-1. The simulation should output a logfile that contains a record of every interaction that occurred during the simulation.  We will use this logfile to determine final statistics and answer questions about the simulation.
+2. An infected person cannot infect a vaccinated person.  This still counts as an interaction.  
+3. An infected person cannot infect someone that is already infected.  This still counts as an interaction.
+4. At the end of a time step, an infected person will either die of the infection or get better.  The chance they will die is the percentage chance stored in mortality_rate.  
+5. For simplicity's sake, if the person does not die, we will consider them immune to the virus and change is_vaccinated to True when this happens.  
+6. Dead people can no longer be infected, either.  Any time an individual dies, we should also change their .infected attribute to False.  
+7. All state changes for a person should occur at the **end** of a time step, after all infected persons have finished all of their interactions.  
+8. During the interactions, make note of any new individuals infected on this turn.  After the interactions are over, we will change the .infected attribute of all newly infected individuals to True.
+9. Resolve the states of all individuals that started the turn infected by determining if they die or survive the infection, and change the appropriate attributes.  
+10. The simulation should output a logfile that contains a record of every interaction that occurred during the simulation.  We will use this logfile to determine final statistics and answer questions about the simulation.
 
 ### Answer These Questions
 
 Once you have successfully run a simulation, use your python skills to answer to analyze the simulation results
 1. What were the inputs you gave the simulation? (Population size, percent vaccinated, virus name, mortality rate,  reproductive rate)
-1. What percentage of the population became infected at some point before the virus burned out?
-1.  What percentage of the population died from the virus?
-1.  Out of all interactions sick individuals had during the entire simulation, how many total interactions did we see where a vaccination saved a person from potentially becoming infected?
+2. What percentage of the population became infected at some point before the virus burned out?
+3.  What percentage of the population died from the virus?
+4.  Out of all interactions sick individuals had during the entire simulation, how many total interactions did we see where a vaccination saved a person from potentially becoming infected?
 <br>
 <br>
 *When you have answered these questions, please put your answers in a file called 'answers.txt' and commit this to your repo.*
@@ -50,17 +51,17 @@ Set up your local clone of this project repo on your computer.
   - Now navigate into the new folder Git just created:
   `cd Herd-Immunity-Simulation`
 
-1. [**Create a new empty repo** on GitHub](https://github.com/new) also named `Herd-Immunity-Simulation` and **do not** initialize it with a ReadMe. (Creating a *new* repo instead of a *fork* allows you to earn credit towards your GitHub commit streak.)
+2. [**Create a new empty repo** on GitHub](https://github.com/new) also named `Herd-Immunity-Simulation` and **do not** initialize it with a ReadMe. (Creating a *new* repo instead of a *fork* allows you to earn credit towards your GitHub commit streak.)
 
-1. **Set the `origin` remote's URL** on your local repo to point to your new repo on GitHub:
+3. **Set the `origin` remote's URL** on your local repo to point to your new repo on GitHub:
 `git remote set-url origin https://github.com/<your-username>/Herd-Immunity-Simulation.git`
 
-1. **Push your local repo** to your *remote* GitHub repo to link your `master` branch to your `origin` remote:
+4. **Push your local repo** to your *remote* GitHub repo to link your `master` branch to your `origin` remote:
 `git push -u origin master`
 
-1. **Commit your code** to your local repo frequently (each time you've made meaningful progress).
+5. **Commit your code** to your local repo frequently (each time you've made meaningful progress).
 
-1. **Push your commits** to your remote GitHub repo when you want to publish and backup your code:
+6. **Push your commits** to your remote GitHub repo when you want to publish and backup your code:
 `git push` (the `-u` in the previous command lets you omit `origin master` afterward).
 
 **Let's get coding!** You'll find instructions for what you need to do marked within the files themselves. Anything that you explicitly need to code should be marked with a comment that starts with `#TODO`.
