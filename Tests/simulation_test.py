@@ -27,3 +27,11 @@ def test_create_population():
 def test_simulation_should_continue():
     virus = Virus("Smallpox", 0.06, 0.15)
     sim = Simulation(100, 0.90, 20, virus)
+
+def test_infect_newly_infected():
+    virus = Virus("Smallpox", 0.06, 0.15)
+    sim = Simulation(100, 0.90, 20, virus)
+    person1 = Person(1, True)
+    sim.newly_infected.append(person1._id)
+    sim._infect_newly_infected()
+    assert person1.infection == virus

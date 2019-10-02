@@ -34,14 +34,12 @@ class Person(object):
                 did_die_from_infection = False
             #Died
             else:
+                self.is_vaccinated = False
                 self.infection = None
                 self.is_alive = False
                 did_die_from_infection = True
-        else: did_die_from_infection = False
-
-        return did_die_from_infection
-
-        self.logger.log_infection_survival(person, did_die_from_infection)
+        else:
+            did_die_from_infection = False
 
 
 ''' These are simple tests to ensure that you are instantiating your Person class correctly. '''

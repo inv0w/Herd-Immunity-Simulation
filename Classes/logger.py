@@ -47,6 +47,7 @@ class Logger(object):
             for line in lines:
                 if len(line.strip()) > 0: list_lines.append(line.strip())
         with open(self.file_name, "a") as logs:
+            for _ in range(2): list_lines.append('')
             logs.writelines('\n'.join(list_lines))
 
         self.clear_file_text(self.formatting_name)
@@ -67,20 +68,24 @@ class Logger(object):
         # along with whether they are sick or vaccinated when they interact to determine
         # exactly what happened in the interaction and create a String, and write to your logfile.
         #Different Case responses
-        is_infected = f"{person._id} infects {random_person._id} \n"
+        is_infected = f"{person._id} infected {random_person._id} \n"
         is_not_infected = f"{person._id} didn't infect {random_person._id} because they got lucky!.\n"
         is_vaccinated = f"{person._id} didn't infect {random_person._id} because they were vaccinated.\n"
         is_already_sick = f"{person._id} didn't infect {random_person._id} because they were already sick.\n"
 
         #Booleans Declared by interaction in Simulation
         with open(self.file_name, "a") as logs:
-            if is_vaccinated: logs.write(is_vaccinated)
-            elif random_person_sick: logs.write(is_already_sick)
-            elif did_infect: logs.write(is_infected)
-            elif not did_infect: logs.write(is_not_infected)
+            if random_person_vacc:
+                logs.write(is_vaccinated)
+            elif random_person_sick:
+                logs.write(is_already_sick)
+            elif did_infect:
+                logs.write(is_infected)
+            elif not did_infect:
+                logs.write(is_not_infected)
 
 
-    def log_infection_survival(self, person, did_die_from_infection):
+    def log_infection_survival(self, person, did_die_from_infection=None):
         ''' The Simulation object uses this method to log the results of every
         call of a Person object's .resolve_infection() method.
 
@@ -95,11 +100,14 @@ class Logger(object):
 
         #Booleans Declared by interaction person's did_survive_infection function
         with open(self.file_name, "a") as logs:
-            if did_die_from_infection: logs.write(is_dead)
-            elif not did_die_from_infectiont: logs.write(is_not_dead)
+            if did_die_from_infection == True:
+                logs.write(is_dead)
+            elif did_die_from_infection == False:
+                logs.write(is_not_dead)
+
 
     def log_time_step(self, time_step_number, total_dead=0, current_infected=0,
-    total_infected=0, newly_infected=0, dead_this_step=0):
+    total_infected=0, newly_infected=0, total_vaccinated=0, dead_this_step=0):
         ''' STRETCH CHALLENGE DETAILS:
 
         If you choose to extend this method, the format of the summary statistics logged
@@ -118,9 +126,10 @@ class Logger(object):
         # new one begins.
         # NOTE: Here is an opportunity for a stretch challenge!
         time_step_summary = dedent(f"""\
-            Infected this time step: {newly_infected}\nDied this time step: {dead_this_step}\n
-            Total Population infected = {total_infected}\nTotal Deaths = {total_dead}\n
-            Time step {time_step_number} ended; Beginning {time_step_number + 1}\n
+            Infected this time step: {newly_infected}\nCurrently Infected = {current_infected}\n
+            Total Population infected = {total_infected}\nTotal Vaccinated = {total_vaccinated}\n
+            Died this time step: {dead_this_step}\nTotal Deaths = {total_dead}\n
+            Time step {time_step_number} ended; Beginning step {time_step_number + 1}\n
             """)
 
         #Removes indentation from the string, and then reformats it a few times
@@ -133,6 +142,7 @@ class Logger(object):
             for line in lines:
                 if len(line.strip()) > 0: step_summary_lines.append(line.strip())
         with open(self.file_name, "a") as logs:
+            step_summary_lines.append('')
             logs.writelines('\n'.join(step_summary_lines))
 
         self.clear_file_text(self.formatting_name)
