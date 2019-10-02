@@ -34,6 +34,7 @@ class Person(object):
                 did_die_from_infection = False
             #Died
             else:
+                self.infection = None
                 self.is_alive = False
                 did_die_from_infection = True
         else: did_die_from_infection = False
