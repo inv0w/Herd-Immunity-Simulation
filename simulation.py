@@ -81,9 +81,8 @@ class Simulation(object):
             person = Person(i+1, False, None)
             self.population.append(person)
             if person._id in vacc_seeding: person.is_vaccinated = True
-            if person._id in virus_seeding:
-                person.infection = self.virus
-                self.newly_infected.append(person._id)
+            if person._id in virus_seeding: self.newly_infected.append(person._id)
+
 
     def _simulation_should_continue(self):
         ''' The simulation should only end if the entire population is dead
@@ -116,13 +115,13 @@ class Simulation(object):
         time_step_counter = 0
         should_continue = self._simulation_should_continue()
 
-        # while should_continue:
-        #     pass
+        while should_continue:
+            self.time_step()
+            time_step_counter += 1
         # TODO: for every iteration of this loop, call self.time_step() to compute another
         # round of this simulation.
-            # self.time_step()
-        # print('The simulation has ended after {time_step_counter} turns.'.format(time_step_counter))
-        # pass
+        print(f'The simulation has ended after {time_step_counter} turns.')
+        pass
 
     def time_step(self):
         ''' This method should contain all the logic for computing one time step
@@ -136,9 +135,13 @@ class Simulation(object):
             3. Otherwise call simulation.interaction(person, random_person) and
                 increment interaction counter by 1.
             '''
+
         total_interactions = 0
+        #If the random person isn't alive, we loop again without adding to interaction counter
         while total_interactions < 100:
-            simulation.interaction(person, random_person)
+            if not random_person.is_alive:
+                simulation.interaction(person, random_person)
+                total_interactions += 1
 
 
     def interaction(self, person, random_person):
@@ -172,7 +175,6 @@ class Simulation(object):
             else:
                 infect = random.random()
                 if infect < virus.repro_rate:
-                    random_person.infection = virus
                     self.newly_infected.append(random_person._id)
                     did_infect = True
                 else: did_infect = False
@@ -183,12 +185,16 @@ class Simulation(object):
 
     def _infect_newly_infected(self):
         ''' This method should iterate through the list of ._id stored in self.newly_infected
-        and update each Person object with the disease. '''
+        and update each Person object with the disease.
+        '''
         # TODO: Call this method at the end of every time step and infect each Person.
         # TODO: Once you have iterated through the entire list of self.newly_infected, remember
         # to reset self.newly_infected back to an empty list.
-        pass
 
+        #Iterates through the newly_infected list, and sets their infection
+        #to the virus. Resets list after.
+        for person in self.newly_infected: person.infection = virus
+        self.newly_infected = []
 
 if __name__ == "__main__":
     #python3 simulation.py Smallpox 0.15 0.06 1000 0.90 30

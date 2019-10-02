@@ -86,7 +86,13 @@ class Logger(object):
         # TODO: Finish this method. If the person survives, did_die_from_infection
         # should be False.  Otherwise, did_die_from_infection should be True.
         # Append the results of the infection to the logfile
-        pass
+        is_dead = f"{person._id} died from the infection.\n"
+        is_not_dead = f"{person.ID} survived the infection!\n"
+
+        #Booleans Declared by interaction person's did_survive_infection function
+        with open(self.file_name, "a") as logs:
+            if did_die_from_infection: logs.write(is_dead)
+            elif not did_die_from_infectiont: logs.write(is_not_dead)
 
     def log_time_step(self, time_step_number):
         ''' STRETCH CHALLENGE DETAILS:

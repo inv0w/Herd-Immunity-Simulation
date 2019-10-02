@@ -31,13 +31,16 @@ class Person(object):
             if death >= self.infection.mortality_rate:
                 self.is_vaccinated = True
                 self.infection = None
-                return True
+                did_die_from_infection = False
             #Died
             else:
                 self.is_alive = False
-                return False
-        else:
-            return True
+                did_die_from_infection = True
+        else: did_die_from_infection = False
+
+        return did_die_from_infection
+
+        self.logger.log_infection_survival(person, did_die_from_infection)
 
 
 ''' These are simple tests to ensure that you are instantiating your Person class correctly. '''
