@@ -3,4 +3,4 @@ Vaccine Percentage: 0.9
 Virus Name = Smallpox
 Mortality Rate = 0.06
 Reproduction Rate = 0.15
-People Initially Infected: 20
+People Initially Infected: 30

@@ -4,9 +4,10 @@ import numpy as np
 from person import Person
 from logger import Logger
 from virus import Virus
+from simulation import Simulation
 import pytest
 import io
-from simulation import Simulation
+
 
 def capture_console_output(function_body):
     # _io.StringIO object

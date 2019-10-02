@@ -37,7 +37,7 @@ class Logger(object):
         with open(self.file_name, "w") as logs:
             logs.writelines(metadata)
 
-        with open(self.file_name, "r+") as logs:
+        with open(self.file_name, "r") as logs:
             meta_lines = []
             lines = logs.readlines()
             for i in lines:
@@ -62,10 +62,19 @@ class Logger(object):
         # represent all the possible edge cases. Use the values passed along with each person,
         # along with whether they are sick or vaccinated when they interact to determine
         # exactly what happened in the interaction and create a String, and write to your logfile.
-        if random_person_sick
-        f"{person._id} infects {random_person._id} \n"
+        #Different Case responses
+        is_infected = f"{person._id} infects {random_person._id} \n"
+        is_not_infected = f"{person.ID} didn't infect {random_person.ID} because they got lucky!.\n"
+        is_vaccinated = f"{person.ID} didn't infect {random_person.ID} because they were vaccinated.\n"
+        is_already_sick = f"{person.ID} didn't infect {random_person.ID} because they were already sick.\n"
 
-        f"{person.ID} didn't infect {random_person.ID} because {'vaccinated' or 'already sick'} \n"
+        #Booleans Declared by interaction in Simulation
+        with open(self.file_name, "a") as logs:
+            if is_vaccinated: logs.write(is_vaccinated)
+            elif random_person_sick: logs.write(is_already_sick)
+            elif did_infect: logs.write(is_infected)
+            elif not did_infect: logs.write(is_not_infected)
+
 
     def log_infection_survival(self, person, did_die_from_infection):
         ''' The Simulation object uses this method to log the results of every

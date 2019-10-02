@@ -4,7 +4,6 @@ import numpy as np
 from person import Person
 from logger import Logger
 from virus import Virus
-import textwrap
 
 class Simulation(object):
     ''' Main class that will run the herd immunity simulation program.
@@ -137,6 +136,9 @@ class Simulation(object):
             3. Otherwise call simulation.interaction(person, random_person) and
                 increment interaction counter by 1.
             '''
+        total_interactions = 0
+        while total_interactions < 100:
+            simulation.interaction(person, random_person)
 
 
     def interaction(self, person, random_person):
@@ -165,16 +167,18 @@ class Simulation(object):
             #     attribute can be changed to True at the end of the time step.
         # TODO: Call slogger method during this method.
         for i in self.population:
-            if random_person.is_vaccinated == True: 
-            elif random_person.infection != None:
-
+            if random_person.is_vaccinated == True: random_person_vacc = True
+            elif random_person.infection != None: random_person_sick = True
             else:
                 infect = random.random()
                 if infect < virus.repro_rate:
-                    self.newly_infected.append(person._id)
+                    random_person.infection = virus
+                    self.newly_infected.append(random_person._id)
+                    did_infect = True
+                else: did_infect = False
 
-            self.logger.log_interaction(person, random_person, random_person_sick=None,
-            random_person_vacc=None, did_infect=None)
+            self.logger.log_interaction(person, random_person, random_person_sick,
+            random_person_vacc, did_infect)
 
 
     def _infect_newly_infected(self):
