@@ -18,6 +18,19 @@ class Logger(object):
     def clear_file_text(self, log_name):
         open(log_name, 'w').close()
 
+    def dent_formatting(self, message):
+        with open(self.formatting_name, "w") as logs_f:
+            logs_f.writelines(message)
+        with open(self.formatting_name, "r") as logs_f:
+            list_lines = []
+            lines = logs_f.readlines()
+            for line in lines:
+                if len(line.strip()) > 0: list_lines.append(line.strip())
+        with open(self.file_name, "a") as logs:
+            for _ in range(2): list_lines.append('')
+            logs.writelines('\n'.join(list_lines))
+        self.clear_file_text(self.formatting_name)
+
     def write_metadata(self, pop_size, vacc_percentage, virus_name, mortality_rate,
                        repro_num, initial_infected):
         '''
@@ -31,26 +44,14 @@ class Logger(object):
         # NOTE: Make sure to end every line with a '/n' character to ensure that each
         # event logged ends up on a separate line!
 
-        metadata = dedent(f"""\
+        metadata = dedent(f"""
             Population Size: {pop_size}\nVaccine Percentage: {vacc_percentage}\n
             Virus Name = {virus_name}\nMortality Rate = {mortality_rate}\n
             Reproduction Rate = {repro_num}\nPeople Initially Infected: {initial_infected}\n
             """)
 
-        #Removes indentation from the string, and then reformats it a few times
-        #So it looks normal in the file.
-        with open(self.formatting_name, "w") as logs_f:
-            logs_f.writelines(metadata)
-        with open(self.formatting_name, "r") as logs_f:
-            list_lines = []
-            lines = logs_f.readlines()
-            for line in lines:
-                if len(line.strip()) > 0: list_lines.append(line.strip())
-        with open(self.file_name, "a") as logs:
-            for _ in range(2): list_lines.append('')
-            logs.writelines('\n'.join(list_lines))
-
-        self.clear_file_text(self.formatting_name)
+        #Removes indentation from the string, and reformats it to allign with text file.
+        self.dent_formatting(metadata)
 
     def log_interaction(self, person, random_person, random_person_sick=None,
                         random_person_vacc=None, did_infect=None):
@@ -68,8 +69,8 @@ class Logger(object):
         # along with whether they are sick or vaccinated when they interact to determine
         # exactly what happened in the interaction and create a String, and write to your logfile.
         #Different Case responses
-        is_infected = f"{person._id} infected {random_person._id} \n"
-        is_not_infected = f"{person._id} didn't infect {random_person._id} because they got lucky!.\n"
+        is_infected = f"{person._id} infected {random_person._id}. \n"
+        is_not_infected = f"{person._id} didn't infect {random_person._id} because they got lucky!\n"
         is_vaccinated = f"{person._id} didn't infect {random_person._id} because they were vaccinated.\n"
         is_already_sick = f"{person._id} didn't infect {random_person._id} because they were already sick.\n"
 
@@ -85,7 +86,7 @@ class Logger(object):
                 logs.write(is_not_infected)
 
 
-    def log_infection_survival(self, person, did_die_from_infection=None):
+    def log_infection_survival(self, person):
         ''' The Simulation object uses this method to log the results of every
         call of a Person object's .resolve_infection() method.
 
@@ -100,14 +101,16 @@ class Logger(object):
 
         #Booleans Declared by interaction person's did_survive_infection function
         with open(self.file_name, "a") as logs:
-            if did_die_from_infection == True:
-                logs.write(is_dead)
-            elif did_die_from_infection == False:
-                logs.write(is_not_dead)
+            if person.infection != None:
+                if person.is_alive:
+                    logs.write(is_not_dead)
+                else:
+                    logs.write(is_dead)
+
 
 
     def log_time_step(self, time_step_number, total_dead=0, current_infected=0,
-    total_infected=0, newly_infected=0, total_vaccinated=0, dead_this_step=0):
+    total_infected=0, newly_infected=0, total_vaccinated=0, dead_this_step=0, total_people=0):
         ''' STRETCH CHALLENGE DETAILS:
 
         If you choose to extend this method, the format of the summary statistics logged
@@ -126,23 +129,12 @@ class Logger(object):
         # new one begins.
         # NOTE: Here is an opportunity for a stretch challenge!
         time_step_summary = dedent(f"""\
-            Infected this time step: {newly_infected}\nCurrently Infected = {current_infected}\n
+            Infected this time step/Currently Infected: {current_infected}\n
             Total Population infected = {total_infected}\nTotal Vaccinated = {total_vaccinated}\n
             Died this time step: {dead_this_step}\nTotal Deaths = {total_dead}\n
+            Total People: {total_people}\n
             Time step {time_step_number} ended; Beginning step {time_step_number + 1}\n
             """)
 
-        #Removes indentation from the string, and then reformats it a few times
-        #So it looks normal in the file.
-        with open(self.formatting_name, "w") as logs_f:
-            logs_f.writelines(time_step_summary)
-        with open(self.formatting_name, "r") as logs_f:
-            step_summary_lines = []
-            lines = logs_f.readlines()
-            for line in lines:
-                if len(line.strip()) > 0: step_summary_lines.append(line.strip())
-        with open(self.file_name, "a") as logs:
-            step_summary_lines.append('')
-            logs.writelines('\n'.join(step_summary_lines))
-
-        self.clear_file_text(self.formatting_name)
+        #Removes indentation from the string, and reformats it to allign with text file.
+        self.dent_formatting(time_step_summary)

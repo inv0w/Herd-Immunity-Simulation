@@ -1,0 +1,12 @@
+            Infected this time step/Currently Infected: 0
+
+            Total Population infected = 97
+Total Vaccinated = 140
+
+            Died this time step: 10
+Total Deaths = 60
+
+            Total People: 200
+
+            Time step 3203 ended; Beginning step 3204
+

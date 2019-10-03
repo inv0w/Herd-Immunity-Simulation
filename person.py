@@ -26,20 +26,17 @@ class Person(object):
         Return a boolean value indicating whether they survived the infection.
         '''
         death = random.random()
-        if self.infection != None:
-            #Survived the Infection
-            if death >= self.infection.mortality_rate:
-                self.is_vaccinated = True
-                self.infection = None
-                did_die_from_infection = False
-            #Died
-            else:
-                self.is_vaccinated = False
-                self.infection = None
-                self.is_alive = False
-                did_die_from_infection = True
+        #Survived the Infection
+        if death >= self.infection.mortality_rate:
+            self.is_vaccinated = True
+            self.infection = False
+            return False
+        #Died
         else:
-            did_die_from_infection = False
+            self.is_vaccinated = True
+            self.infection = False
+            self.is_alive = False
+            return True
 
 
 ''' These are simple tests to ensure that you are instantiating your Person class correctly. '''
