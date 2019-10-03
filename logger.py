@@ -52,6 +52,8 @@ class Logger(object):
 
         #Removes indentation from the string, and reformats it to allign with text file.
         self.dent_formatting(metadata)
+        with open(self.file_name, "a") as logs_f:
+            logs_f.write("Beginning step 1\n\n")
 
     def log_interaction(self, person, random_person, random_person_sick=None,
                         random_person_vacc=None, did_infect=None):
@@ -132,8 +134,10 @@ class Logger(object):
             {'-'*50}\nTime step {time_step_number} ended\nInfected this time step: {current_infected}\n
             Died this time step: {dead_this_step}\nTotal Vaccinated = {total_vaccinated}\n
             Total Population infected = {total_infected}\nTotal Deaths = {total_dead}\n{'-'*50}\n
-            Beginning step {time_step_number + 1}\n
             """)
 
         #Removes indentation from the string, and reformats it to allign with text file.
         self.dent_formatting(time_step_summary)
+        if time_step_number != 0:
+            with open(self.file_name, "a") as logs_f:
+                logs_f.write(f"Beginning step {time_step_number + 1}\n\n")
