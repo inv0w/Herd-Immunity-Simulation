@@ -110,7 +110,7 @@ class Logger(object):
 
 
     def log_time_step(self, time_step_number, total_dead=0, current_infected=0,
-    total_infected=0, newly_infected=0, total_vaccinated=0, dead_this_step=0, total_people=0):
+    total_infected=0, newly_infected=0, total_vaccinated=0, dead_this_step=0):
         ''' STRETCH CHALLENGE DETAILS:
 
         If you choose to extend this method, the format of the summary statistics logged
@@ -129,11 +129,10 @@ class Logger(object):
         # new one begins.
         # NOTE: Here is an opportunity for a stretch challenge!
         time_step_summary = dedent(f"""\
-            Infected this time step/Currently Infected: {current_infected}\n
-            Total Population infected = {total_infected}\nTotal Vaccinated = {total_vaccinated}\n
-            Died this time step: {dead_this_step}\nTotal Deaths = {total_dead}\n
-            Total People: {total_people}\n
-            Time step {time_step_number} ended; Beginning step {time_step_number + 1}\n
+            {'-'*50}\nTime step {time_step_number} ended\nInfected this time step: {current_infected}\n
+            Died this time step: {dead_this_step}\nTotal Vaccinated = {total_vaccinated}\n
+            Total Population infected = {total_infected}\nTotal Deaths = {total_dead}\n{'-'*50}\n
+            Beginning step {time_step_number + 1}\n
             """)
 
         #Removes indentation from the string, and reformats it to allign with text file.

@@ -124,12 +124,14 @@ class Simulation(object):
 
         #Runs until there are no more infected people. Only vaccinated or dead.
         while should_continue:
+            current_dead = self.total_dead
             self.time_step()
             time_step_counter += 1
-            dead_this_step = self.total_dead - dead_this_step
+            dead_this_step = self.total_dead - current_dead
             self.logger.log_time_step(time_step_counter, self.total_dead,
             self.current_infected, self.total_infected, len(self.newly_infected),
-            self.total_vaccinated, dead_this_step, len(self.population))
+            self.total_vaccinated, dead_this_step)
+            should_continue = self._simulation_should_continue()
         # TODO: for every iteration of this loop, call self.time_step() to compute another
         # round of this simulation.
         print(f'The simulation has ended after {time_step_counter} turns.')
