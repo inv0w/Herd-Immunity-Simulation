@@ -4,6 +4,7 @@ import numpy as np
 from person import Person
 from logger import Logger
 from virus import Virus
+import matplotlib.pyplot as plt
 
 class Simulation(object):
     ''' Main class that will run the herd immunity simulation program.
@@ -199,18 +200,18 @@ class Simulation(object):
         self.newly_infected = []
 
 if __name__ == "__main__":
-    #python3 simulation.py Small_Pox 0.06 0.15 200 0.50 10
+    #python3 simulation.py 4000 0.75 Smallpox 0.15 0.06 5
     params = sys.argv[1:]
-    virus_name = str(params[0])
-    repro_num = float(params[1])
-    mortality_rate = float(params[2])
-    pop_size = int(params[3])
-    vacc_percentage = float(params[4])
+    pop_size = int(params[0])
+    vacc_percentage = float(params[1])
+    virus_name = str(params[2])
+    mortality_rate = float(params[3])
+    repro_num = float(params[4])
 
     if len(params) == 6:
         initial_infected = int(params[5])
     else:
-        initial_infected = 1
+        initial_infected = 10
 
     virus = Virus(virus_name, repro_num, mortality_rate)
     sim = Simulation(pop_size, vacc_percentage, virus, initial_infected)
