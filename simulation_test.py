@@ -38,3 +38,8 @@ def test_infect_newly_infected():
     sim.newly_infected.append(person1._id)
     sim._infect_newly_infected()
     assert person1.infection == virus
+
+def test_plot_graph():
+    virus = Virus("Smallpox", 0.06, 0.15)
+    sim = Simulation(100, 0.90, virus)
+    sim.plot_graph()

@@ -1,5 +1,5 @@
 1. Inputs I gave for the simulation were: Smallpox 0.06 0.15 4000 0.75 5
-2. 0.1645% of the population became infected at some point.
-3. 0.02175% of the population died.
-4. The amount of times someone was saved because they were vaccinated was 54866
+2. 0.1355% of the population became infected at some point.
+3. 0.01975% of the population died.
+4. The amount of times someone was saved because they were vaccinated was 44512
 

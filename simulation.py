@@ -5,6 +5,7 @@ from person import Person
 from logger import Logger
 from virus import Virus
 import matplotlib.pyplot as plt
+from scipy.interpolate import UnivariateSpline
 
 class Simulation(object):
     ''' Main class that will run the herd immunity simulation program.
@@ -94,9 +95,11 @@ class Simulation(object):
         dead_this_step = 0
         time_step_counter = 0
         should_continue = self._simulation_should_continue()
+        plot_current_infected = []
 
         #Runs until there are no more infected people. Only vaccinated or dead.
         while should_continue:
+            plot_current_infected.append(self.current_infected)
             current_dead = self.total_dead
             self.time_step()
             time_step_counter += 1
@@ -109,6 +112,9 @@ class Simulation(object):
         print(f'The simulation has ended after {time_step_counter} turns.')
         self.logger.log_answers(self.total_dead, self.total_infected,self.virus,
         self.pop_size, self.vacc_percentage, self.initial_infected, self.saved_from_vac)
+        #Opens up Graph for statistic about log and answers
+        plot_y = np.array(plot_current_infected)
+        self.plot_graph(time_step_counter, plot_y)
 
     def time_step(self):
         ''' This method should contain all the logic for computing one time step
@@ -198,6 +204,22 @@ class Simulation(object):
                 if person._id == id:
                     person.infection= self.virus
         self.newly_infected = []
+
+    def plot_graph(self, time_step, plot_y):
+        '''Makes a graph using matplotlib. Takes in final step counter as last x
+        element, last element in y is based off of infect population.
+        '''
+        x = range(time_step)
+        y = plot_y
+        spline = UnivariateSpline(x, y, s=10)
+        xsmooth = np.linspace(0, time_step, 300)
+        #Displays for the Plot, Actual Data vs Smoothed Data
+        plt.plot(x, y, 'o')
+        plt.plot(xsmooth, spline(xsmooth))
+        plt.title(f'{self.virus.name} Infection')
+        plt.xlabel('Time Steps')
+        plt.ylabel('People Currently Infected')
+        plt.show()
 
 if __name__ == "__main__":
     #python3 simulation.py 4000 0.75 Smallpox 0.15 0.06 5
