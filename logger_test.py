@@ -21,7 +21,6 @@ def test_clear_file_text():
     logger = Logger("logs.txt", "logs_formatting.txt")
     logger.clear_file_text(logger.file_name)
     logger.clear_file_text(logger.formatting_name)
-    # assert logger.file_name.readlines() == logger.formatting_name.readlines()
     with open(logger.file_name, "r") as logs:
         file_grid = []
         file_lines = logs.readlines()
@@ -29,3 +28,49 @@ def test_clear_file_text():
         formatting_grid = []
         form_lines = logs_f.readlines()
     assert file_lines == form_lines
+
+def test_text_formatting():
+    logger = Logger("logs.txt", "logs_formatting.txt")
+    file_name = 'logs.txt'
+    message = "Testing creating of\n        new lines       and     spacing"
+    logger.text_formatting(file_name, message)
+    with open(logger.file_name, "r") as logs:
+        lines = []
+        lines = logs.readlines()
+    assert lines[0] == 'Testing creating of' + '\n'
+    assert lines[1] == 'new lines and spacing' + '\n'
+
+#write_metadata, log_time_step, and log_answers, all rely on just above two
+#functions to work. Same tests would apply to all.
+
+def test_log_interaction():
+    logger = Logger("logs.txt", "logs_formatting.txt")
+    virus = Virus("Smallpox", 0.06, 0.15)
+    sim = Simulation(200, 0.90, virus)
+    person = Person(1, False, infection=virus)
+    random_person2 = Person(2, False, infection=virus)
+    random_person3 = Person(3, True, None)
+    logger.clear_file_text(logger.file_name)
+    sim.interaction(person, random_person2)
+    sim.interaction(person, random_person3)
+    with open(logger.file_name, "r") as logs:
+        lines = []
+        lines = logs.readlines()
+    assert lines[0] == "1 didn't infect 2 because they were already sick.\n"
+    assert lines[1] == "1 didn't infect 3 because they were vaccinated.\n"
+
+def test_log_infection_survival():
+    logger = Logger("logs.txt", "logs_formatting.txt")
+    virus = Virus("Smallpox", 0.06, 0.15)
+    person = Person(1, False, infection=virus)
+    logger.clear_file_text(logger.file_name)
+    survived = person.did_survive_infection()
+    logger.log_infection_survival(person)
+    with open(logger.file_name, "r") as logs:
+        lines = []
+        lines = logs.readlines()
+    if survived:
+        assert lines[0] == "1 survived the infection!\n"
+    else:
+        assert lines[0] == "1 died from the infection.\n"
+        

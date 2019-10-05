@@ -13,3 +13,10 @@ def test_virus_instantiation():
     assert virus.name == "Smallpox"
     assert virus.repro_rate == 0.06
     assert virus.mortality_rate == 0.15
+
+def test_not_virus_instantiation():
+    '''Check to make sure that the virus instantiator is not working.'''
+    virus = Virus("Applebees", 0.42, 0.98)
+    assert virus.name != "Smallpox"
+    assert virus.repro_rate != 0.06
+    assert virus.mortality_rate != 0.15
