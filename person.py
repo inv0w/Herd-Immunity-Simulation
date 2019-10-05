@@ -29,14 +29,14 @@ class Person(object):
         #Survived the Infection
         if death >= self.infection.mortality_rate:
             self.is_vaccinated = True
-            self.infection = False
-            return False
+            self.infection = None
+            return True
         #Died
         else:
             self.is_vaccinated = True
-            self.infection = False
+            self.infection = None
             self.is_alive = False
-            return True
+            return False
 
 
 ''' These are simple tests to ensure that you are instantiating your Person class correctly. '''
@@ -84,6 +84,6 @@ def test_did_survive_infection():
         assert person.infection is None
     else:
         assert person.is_alive is False
-        assert person.is_vaccinated is False
-        assert person.infection is virus
+        assert person.is_vaccinated is True
+        assert person.infection is None
         pass

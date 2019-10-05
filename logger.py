@@ -1,5 +1,5 @@
-import textwrap
-from textwrap import dedent
+import os
+import re
 
 class Logger(object):
     ''' Utility class responsible for logging all interactions during the simulation. '''
@@ -15,26 +15,28 @@ class Logger(object):
         self.file_name = file_name
         self.formatting_name = formatting_name
 
-    def clear_file_text(self, log_name):
-        open(log_name, 'w').close()
+    def clear_file_text(self, file_name):
+        open(file_name, 'w').close()
 
-    def dent_formatting(self, message):
+    def text_formatting(self, file_name, message):
+        '''The logger uses this method to make doc strings flush with text document'''
+
         with open(self.formatting_name, "w") as logs_f:
             logs_f.writelines(message)
         with open(self.formatting_name, "r") as logs_f:
             list_lines = []
             lines = logs_f.readlines()
             for line in lines:
-                if len(line.strip()) > 0: list_lines.append(line.strip())
-        with open(self.file_name, "a") as logs:
+                if len(line.strip()) > 0:
+                    list_lines.append(re.sub(' +', ' ', line).strip())
+
+        with open(file_name, "a") as logs:
             for _ in range(2): list_lines.append('')
             logs.writelines('\n'.join(list_lines))
-        self.clear_file_text(self.formatting_name)
 
     def write_metadata(self, pop_size, vacc_percentage, virus_name, mortality_rate,
-                       repro_num, initial_infected):
-        '''
-        The simulation class should use this method immediately to log the specific
+        repro_num, initial_infected):
+        '''The simulation class should use this method immediately to log the specific
         parameters of the simulation as the first line of the file.
         '''
         # TODO: Finish this method. This line of metadata should be tab-delimited
@@ -44,19 +46,19 @@ class Logger(object):
         # NOTE: Make sure to end every line with a '/n' character to ensure that each
         # event logged ends up on a separate line!
 
-        metadata = dedent(f"""
+        metadata = (f"""
             Population Size: {pop_size}\nVaccine Percentage: {vacc_percentage}\n
             Virus Name = {virus_name}\nMortality Rate = {mortality_rate}\n
             Reproduction Rate = {repro_num}\nPeople Initially Infected: {initial_infected}\n
             """)
 
         #Removes indentation from the string, and reformats it to allign with text file.
-        self.dent_formatting(metadata)
+        self.text_formatting(self.file_name, metadata)
         with open(self.file_name, "a") as logs_f:
             logs_f.write("Beginning step 1\n\n")
 
-    def log_interaction(self, person, random_person, random_person_sick=None,
-                        random_person_vacc=None, did_infect=None):
+    def log_interaction(self, person, random_person, random_person_sick,
+        random_person_vacc, did_infect):
         '''
         The Simulation object should use this method to log every interaction
         a sick person has during each time step.
@@ -111,8 +113,8 @@ class Logger(object):
 
 
 
-    def log_time_step(self, time_step_number, total_dead=0, current_infected=0,
-    total_infected=0, newly_infected=0, total_vaccinated=0, dead_this_step=0):
+    def log_time_step(self, time_step_number, total_dead, current_infected,
+        total_infected, newly_infected, dead_this_step):
         ''' STRETCH CHALLENGE DETAILS:
 
         If you choose to extend this method, the format of the summary statistics logged
@@ -130,14 +132,32 @@ class Logger(object):
         # TODO: Finish this method. This method should log when a time step ends, and a
         # new one begins.
         # NOTE: Here is an opportunity for a stretch challenge!
-        time_step_summary = dedent(f"""\
+        time_step_summary = (f"""\
             {'-'*50}\nTime step {time_step_number} ended\nInfected this time step: {current_infected}\n
-            Died this time step: {dead_this_step}\nTotal Vaccinated = {total_vaccinated}\n
-            Total Population infected = {total_infected}\nTotal Deaths = {total_dead}\n{'-'*50}\n
+            Died this time step: {dead_this_step}\nTotal Population that has been infected = {total_infected}\n
+            Total Deaths = {total_dead}\n{'-'*50}\n
             """)
 
         #Removes indentation from the string, and reformats it to allign with text file.
-        self.dent_formatting(time_step_summary)
-        if time_step_number != 0:
+        self.text_formatting(self.file_name, time_step_summary)
+        if current_infected != 0:
             with open(self.file_name, "a") as logs_f:
                 logs_f.write(f"Beginning step {time_step_number + 1}\n\n")
+
+    def log_answers(self, total_dead, total_infected, virus, pop_size, vacc_percentage,
+        initial_infected, saved_from_vac):
+        ''' The Simulation object uses this method to log the answers of the ReadMe '''
+
+        infected_percentage  = f"{float(total_infected / pop_size)}%"
+        dead_percentage = f"{float(total_dead / pop_size)}%"
+
+        answers = (f"""\
+            1. Inputs I gave for the simulation were: {virus.name} {virus.repro_rate}\
+            {virus.mortality_rate} {pop_size} {vacc_percentage} {initial_infected}\n
+            2. {infected_percentage} of the population became infected at some point.\n
+            3. {dead_percentage} of the population died.\n4. The amount of times someone\
+            was saved because they were vaccinated was {saved_from_vac}\n
+            """)
+
+        self.clear_file_text('answers.txt')
+        self.text_formatting('answers.txt', answers)

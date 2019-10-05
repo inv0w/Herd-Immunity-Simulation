@@ -1,0 +1,5 @@
+1. Inputs I gave for the simulation were: Small_Pox 0.06 0.15 5000 0.8 15
+2. 0.0782% of the population became infected at some point.
+3. 0.0118% of the population died.
+4. The amount of times someone was saved because they were vaccinated was 33996
+

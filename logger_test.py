@@ -7,8 +7,7 @@ from virus import Virus
 from simulation import Simulation
 import pytest
 import io
-import textwrap
-from textwrap import dedent
+import re
 
 def capture_console_output(function_body):
     # _io.StringIO object

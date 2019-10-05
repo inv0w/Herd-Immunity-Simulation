@@ -45,16 +45,13 @@ class Simulation(object):
         self.current_infected = 0 # Int
         self.vacc_percentage = vacc_percentage # float between 0 and 1
         self.total_dead = 0 # Int
-        self.total_vaccinated = 0
-        self.file_name = "{}_simulation_pop_{}_vp_{}_infected_{}.txt".format(
-            virus_name, pop_size, vacc_percentage, initial_infected)
+        self.saved_from_vac = 0
         self.newly_infected = []
 
         #Clearing Text Files and Printing metadata
         self.logger.clear_file_text(self.logger.file_name)
-        self.logger.clear_file_text(self.logger.formatting_name)
-        self.logger.write_metadata(pop_size, vacc_percentage, virus_name,
-        mortality_rate, repro_num, initial_infected)
+        self.logger.write_metadata(pop_size, vacc_percentage, self.virus.name,
+            self.virus.mortality_rate, self.virus.repro_rate, initial_infected)
 
     def _create_population(self, initial_infected):
         '''This method will create the initial population.
@@ -130,11 +127,13 @@ class Simulation(object):
             dead_this_step = self.total_dead - current_dead
             self.logger.log_time_step(time_step_counter, self.total_dead,
             self.current_infected, self.total_infected, len(self.newly_infected),
-            self.total_vaccinated, dead_this_step)
+            dead_this_step)
             should_continue = self._simulation_should_continue()
         # TODO: for every iteration of this loop, call self.time_step() to compute another
         # round of this simulation.
         print(f'The simulation has ended after {time_step_counter} turns.')
+        self.logger.log_answers(self.total_dead, self.total_infected,self.virus,
+        self.pop_size, self.vacc_percentage, self.initial_infected, self.saved_from_vac)
 
     def time_step(self):
         ''' This method should contain all the logic for computing one time step
@@ -209,6 +208,7 @@ class Simulation(object):
         # TODO: Call slogger method during this method.
         if random_person.is_vaccinated:
             random_person_vacc = True
+            self.saved_from_vac += 1
         elif random_person.infection != None:
             random_person_sick = True
         else:
@@ -240,7 +240,7 @@ class Simulation(object):
         self.newly_infected = []
 
 if __name__ == "__main__":
-    #python3 simulation.py White_Death 0.75 0.65 300 0.70 10
+    #python3 simulation.py Small_Pox 0.06 0.15 200 0.50 10
     params = sys.argv[1:]
     virus_name = str(params[0])
     repro_num = float(params[1])
