@@ -74,7 +74,6 @@ class Simulation(object):
                 self.current_infected += 1
                 person.infection = self.virus
 
-
     def _simulation_should_continue(self):
         ''' The simulation should only end if the entire population is dead
         or everyone is vaccinated.
@@ -197,7 +196,6 @@ class Simulation(object):
         self.logger.log_interaction(person, random_person, random_person_sick,
         random_person_vacc, did_infect)
 
-
     def _infect_newly_infected(self):
         ''' This method should iterate through the list of ._id stored in self.newly_infected
         and update each Person object with the disease.
@@ -218,10 +216,9 @@ class Simulation(object):
         x = range(len(plot_y))
         y = np.array(plot_y)
         y2 = np.array(plot_y2)
-        spline = UnivariateSpline(x, y, s=10)
-        spline2 = UnivariateSpline(x, y2, s=10)
+        spline = UnivariateSpline(x, y, s=5)
+        spline2 = UnivariateSpline(x, y2, s=5)
         xsmooth = np.linspace(0, time_step, 500)
-
         #Creates different sublots for variable output to logs.
         fig, ax1 = plt.subplots()
         ax2 = ax1.twinx()
