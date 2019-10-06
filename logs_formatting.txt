@@ -1,11 +1,8 @@
+            1. Inputs I gave for the simulation were: Smallpox 0.06            0.15 4000 0.75 5
 
-            Population Size: 100
-Vaccine Percentage: 0.9
+            2. 0.16075% of the population became infected at some point.
 
-            Virus Name = Smallpox
-Mortality Rate = 0.15
-
-            Reproduction Rate = 0.06
-People Initially Infected: 10
+            3. 0.023% of the population died.
+4. The amount of times someone            was saved because they were vaccinated was 53655
 
             
