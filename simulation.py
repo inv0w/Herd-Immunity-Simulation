@@ -97,8 +97,8 @@ class Simulation(object):
         time_step_counter = 0
         should_continue = self._simulation_should_continue()
         plot_y = []
-        plot_y.append(self.current_infected)
         plot_y2 = []
+        plot_y.append(self.current_infected)
         plot_y2.append(self.total_dead)
         #Runs until there are no more infected people. Only vaccinated or dead.
         while should_continue:
@@ -119,8 +119,6 @@ class Simulation(object):
         self.logger.log_answers(self.total_dead, self.total_infected,self.virus,
         self.pop_size, self.vacc_percentage, self.initial_infected, self.saved_from_vac)
         #Opens up Graph for statistic about log and answers
-        plot_y = np.array(plot_y)
-        plot_y2 = np.array(plot_y2)
         self.plot_graph(time_step_counter, plot_y, plot_y2)
 
     def time_step(self):
@@ -181,7 +179,8 @@ class Simulation(object):
         random_person_vacc = None
         random_person_sick = None
         did_infect = None
-
+        #Checks if if they are vaccinated, or are already sick. If not they have
+        #a chance to get infected
         if random_person.is_vaccinated:
             random_person_vacc = True
             self.saved_from_vac += 1
@@ -217,8 +216,8 @@ class Simulation(object):
         '''
         #For X and Y Values of Points, als smoothing points
         x = range(len(plot_y))
-        y = plot_y
-        y2 = plot_y2
+        y = np.array(plot_y)
+        y2 = np.array(plot_y2)
         spline = UnivariateSpline(x, y, s=10)
         spline2 = UnivariateSpline(x, y2, s=10)
         xsmooth = np.linspace(0, time_step, 500)
@@ -228,17 +227,17 @@ class Simulation(object):
         ax2 = ax1.twinx()
         #Draws the lines and applys smoothing
         ax1.plot(x, y, 'o', color='blue')#Dots
-        ax1.plot(x, y2, 'o', color='red')
-        ax1.set_title(f'Population Size: {self.pop_size}', fontsize=8)
-        ax2.plot(xsmooth, spline(xsmooth), 'b--', label='People Currently Infected')#Lines
-        ax2.plot(xsmooth, spline2(xsmooth), 'r--', label='Total Deaths')
+        ax2.plot(x, y2, 'o', color='red')
+        l1, = ax1.plot(xsmooth, spline(xsmooth), 'b--', label='People Currently Infected')#Lines
+        l2, = ax2.plot(xsmooth, spline2(xsmooth), 'r--', label='Total Deaths')
         #Graph Labels and Length
+        ax1.set_title(f'Population Size: {self.pop_size}', fontsize=8)
         fig.suptitle(f'{self.virus.name} Infection', fontsize=14)
         ax1.set_xlabel('Time Steps')
         ax1.set_ylabel('People Currently Infected', color='blue')
         ax2.set_ylabel('Total Deaths', color='red')
         ax1.set_xlim([0, len(x)-1])
-        ax2.legend(loc='upper left')
+        plt.legend([l1, l2],['People Currently Infected', 'Total Deaths'])
         #Saves and shows graph made
         fig.savefig("Graph_Infected_and_Dead.png")
         plt.show()
