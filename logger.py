@@ -125,7 +125,7 @@ class Logger(object):
 
         answers = (f"""\
             1. Inputs I gave for the simulation were: {pop_size}  {vacc_percentage}\
-            {virus.name} {virus.mortality_rate} {virus.repro_rate}{initial_infected}\n
+            {virus.name} {virus.mortality_rate} {virus.repro_rate} {initial_infected}\n
             2. {infected_percentage} of the population became infected at some point.\n
             3. {dead_percentage} of the population died.\n4. The amount of times someone\
             was saved because they were vaccinated was {saved_from_vac}\n
