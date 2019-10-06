@@ -7,6 +7,7 @@ from virus import Virus
 import matplotlib.pyplot as plt
 from scipy.interpolate import UnivariateSpline
 
+
 class Simulation(object):
     ''' Main class that will run the herd immunity simulation program.
     Expects initialization parameters passed as command line arguments when file is run.
@@ -46,7 +47,7 @@ class Simulation(object):
         #Clearing Text Files and Printing metadata
         self.logger.clear_file_text(self.logger.file_name)
         self.logger.write_metadata(pop_size, vacc_percentage, self.virus.name,
-            self.virus.mortality_rate, self.virus.repro_rate, initial_infected)
+        self.virus.mortality_rate, self.virus.repro_rate, initial_infected)
 
     def _create_population(self, initial_infected):
         '''This method will create the initial population.
@@ -91,7 +92,7 @@ class Simulation(object):
         ''' This method should run the simulation until all requirements for ending
         the simulation are met.
         '''
-        self._create_population(initial_infected)
+        self._create_population(self.initial_infected)
         dead_this_step = 0
         time_step_counter = 0
         should_continue = self._simulation_should_continue()
@@ -117,7 +118,6 @@ class Simulation(object):
         print(f'The simulation has ended after {time_step_counter} turns.')
         self.logger.log_answers(self.total_dead, self.total_infected,self.virus,
         self.pop_size, self.vacc_percentage, self.initial_infected, self.saved_from_vac)
-        self.logger.clear_file_text(self.logger.formatting_name)
         #Opens up Graph for statistic about log and answers
         plot_y = np.array(plot_y)
         plot_y2 = np.array(plot_y2)
@@ -189,7 +189,7 @@ class Simulation(object):
             random_person_sick = True
         else:
             infect = random.random()
-            if infect <= virus.repro_rate:
+            if infect <= self.virus.repro_rate:
                 self.newly_infected.append(random_person._id)
                 did_infect = True
             else:
@@ -215,11 +215,12 @@ class Simulation(object):
         '''Makes a graph using matplotlib. Takes in final step counter as last x
         element, last element in y is based off of infect population.
         '''
+        #For X and Y Values of Points, als smoothing points
         x = range(len(plot_y))
         y = plot_y
         y2 = plot_y2
-        spline = UnivariateSpline(x, y, s=30)
-        spline2 = UnivariateSpline(x, y2, s=30)
+        spline = UnivariateSpline(x, y, s=10)
+        spline2 = UnivariateSpline(x, y2, s=10)
         xsmooth = np.linspace(0, time_step, 500)
 
         #Creates different sublots for variable output to logs.

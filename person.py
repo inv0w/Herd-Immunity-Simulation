@@ -26,18 +26,15 @@ class Person(object):
         Return a boolean value indicating whether they survived the infection.
         '''
         death = random.random()
-        #Survived the Infection
-        if death >= self.infection.mortality_rate:
+        if death >= self.infection.mortality_rate: #Survived the Infection
             self.is_vaccinated = True
             self.infection = None
             return True
-        #Died
-        else:
+        else: #Died
             self.is_vaccinated = True
             self.infection = None
             self.is_alive = False
             return False
-
 
 ''' These are simple tests to ensure that you are instantiating your Person class correctly. '''
 def test_vacc_person_instantiation():
@@ -48,13 +45,11 @@ def test_vacc_person_instantiation():
     assert person.is_vaccinated is True
     assert person.infection is None
 
-
 def test_not_vacc_person_instantiation():
     person = Person(2, False)
 
     assert person._id == 2
     assert person.is_vaccinated is False
-
 
 def test_sick_person_instantiation():
     virus = Virus("Dysentery", 0.7, 0.2)
@@ -64,11 +59,9 @@ def test_sick_person_instantiation():
     assert person.is_vaccinated is False
     assert person.infection is virus
 
-
 def test_did_survive_infection():
     virus = Virus("Dysentery", 0.7, 0.2)
     person = Person(4, False, infection=virus)
-
     # Resolve whether the Person survives the infection or not
     survived = person.did_survive_infection()
     # Check if the Person survived or not

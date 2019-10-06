@@ -1,6 +1,7 @@
 import os
 import re
 
+
 class Logger(object):
     ''' Utility class responsible for logging all interactions during the simulation. '''
 
@@ -37,7 +38,6 @@ class Logger(object):
             Virus Name = {virus_name}\nMortality Rate = {mortality_rate}\n
             Reproduction Rate = {repro_num}\nPeople Initially Infected: {initial_infected}\n
             """)
-
         #Removes indentation from the string, and reformats it to allign with text file.
         self.text_formatting(self.file_name, metadata)
         with open(self.file_name, "a") as logs_f:
@@ -71,7 +71,6 @@ class Logger(object):
             elif not did_infect:
                 logs.write(is_not_infected)
 
-
     def log_infection_survival(self, person):
         ''' The Simulation object uses this method to log the results of every
         call of a Person object's .resolve_infection() method.
@@ -88,8 +87,6 @@ class Logger(object):
                     logs.write(is_not_dead)
                 else:
                     logs.write(is_dead)
-
-
 
     def log_time_step(self, time_step_number, total_dead, current_infected,
         total_infected, newly_infected, dead_this_step):
@@ -112,9 +109,9 @@ class Logger(object):
             Died this time step: {dead_this_step}\nTotal Population that has been infected = {total_infected}\n
             Total Deaths = {total_dead}\n{'-'*50}\n
             """)
-
         #Removes indentation from the string, and reformats it to allign with text file.
         self.text_formatting(self.file_name, time_step_summary)
+        #If it's the last step, function will not write to file
         if current_infected != 0:
             with open(self.file_name, "a") as logs_f:
                 logs_f.write(f"Beginning step {time_step_number + 1}\n\n")
