@@ -117,6 +117,7 @@ class Simulation(object):
         print(f'The simulation has ended after {time_step_counter} turns.')
         self.logger.log_answers(self.total_dead, self.total_infected,self.virus,
         self.pop_size, self.vacc_percentage, self.initial_infected, self.saved_from_vac)
+        self.logger.clear_file_text(self.logger.formatting_name)
         #Opens up Graph for statistic about log and answers
         plot_y = np.array(plot_y)
         plot_y2 = np.array(plot_y2)
@@ -236,6 +237,7 @@ class Simulation(object):
         ax2.set_ylabel('Total Deaths', color='red')
         ax1.set_xlim([0, len(x)-1])
         ax2.legend(loc='upper left')
+        fig.savefig("Graph_Infected_and_Dead.png")
         plt.show()
 
 if __name__ == "__main__":
