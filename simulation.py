@@ -228,15 +228,17 @@ class Simulation(object):
         #Draws the lines and applys smoothing
         ax1.plot(x, y, 'o', color='blue')#Dots
         ax1.plot(x, y2, 'o', color='red')
+        ax1.set_title(f'Population Size: {self.pop_size}', fontsize=8)
         ax2.plot(xsmooth, spline(xsmooth), 'b--', label='People Currently Infected')#Lines
         ax2.plot(xsmooth, spline2(xsmooth), 'r--', label='Total Deaths')
         #Graph Labels and Length
-        ax1.set_title(f'{self.virus.name} Infection')
+        fig.suptitle(f'{self.virus.name} Infection', fontsize=14)
         ax1.set_xlabel('Time Steps')
         ax1.set_ylabel('People Currently Infected', color='blue')
         ax2.set_ylabel('Total Deaths', color='red')
         ax1.set_xlim([0, len(x)-1])
         ax2.legend(loc='upper left')
+        #Saves and shows graph made
         fig.savefig("Graph_Infected_and_Dead.png")
         plt.show()
 
