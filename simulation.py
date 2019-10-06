@@ -95,15 +95,20 @@ class Simulation(object):
         dead_this_step = 0
         time_step_counter = 0
         should_continue = self._simulation_should_continue()
-        plot_current_infected = []
-
+        plot_y = []
+        plot_y.append(self.current_infected)
+        plot_y2 = []
+        plot_y2.append(self.total_dead)
         #Runs until there are no more infected people. Only vaccinated or dead.
         while should_continue:
-            plot_current_infected.append(self.current_infected)
-            current_dead = self.total_dead
             self.time_step()
             time_step_counter += 1
+            #Graph values
+            plot_y.append(self.current_infected)
+            plot_y2.append(self.total_dead)
+            current_dead = self.total_dead
             dead_this_step = self.total_dead - current_dead
+            #Logs and checks if to repeat
             self.logger.log_time_step(time_step_counter, self.total_dead,
             self.current_infected, self.total_infected, len(self.newly_infected),
             dead_this_step)
@@ -113,8 +118,9 @@ class Simulation(object):
         self.logger.log_answers(self.total_dead, self.total_infected,self.virus,
         self.pop_size, self.vacc_percentage, self.initial_infected, self.saved_from_vac)
         #Opens up Graph for statistic about log and answers
-        plot_y = np.array(plot_current_infected)
-        self.plot_graph(time_step_counter, plot_y)
+        plot_y = np.array(plot_y)
+        plot_y2 = np.array(plot_y2)
+        self.plot_graph(time_step_counter, plot_y, plot_y2)
 
     def time_step(self):
         ''' This method should contain all the logic for computing one time step
@@ -142,7 +148,6 @@ class Simulation(object):
                 person.did_survive_infection()
                 self.logger.log_infection_survival(person)
         self._infect_newly_infected()
-
         #Gets values of Person Objects and assigns Simulation values based off their properties
         died = 0
         total_vaccinated = 0
@@ -205,20 +210,32 @@ class Simulation(object):
                     person.infection= self.virus
         self.newly_infected = []
 
-    def plot_graph(self, time_step, plot_y):
+    def plot_graph(self, time_step, plot_y, plot_y2):
         '''Makes a graph using matplotlib. Takes in final step counter as last x
         element, last element in y is based off of infect population.
         '''
-        x = range(time_step)
+        x = range(len(plot_y))
         y = plot_y
-        spline = UnivariateSpline(x, y, s=10)
-        xsmooth = np.linspace(0, time_step, 300)
-        #Displays for the Plot, Actual Data vs Smoothed Data
-        plt.plot(x, y, 'o')
-        plt.plot(xsmooth, spline(xsmooth))
-        plt.title(f'{self.virus.name} Infection')
-        plt.xlabel('Time Steps')
-        plt.ylabel('People Currently Infected')
+        y2 = plot_y2
+        spline = UnivariateSpline(x, y, s=30)
+        spline2 = UnivariateSpline(x, y2, s=30)
+        xsmooth = np.linspace(0, time_step, 500)
+
+        #Creates different sublots for variable output to logs.
+        fig, ax1 = plt.subplots()
+        ax2 = ax1.twinx()
+        #Draws the lines and applys smoothing
+        ax1.plot(x, y, 'o', color='blue')#Dots
+        ax1.plot(x, y2, 'o', color='red')
+        ax2.plot(xsmooth, spline(xsmooth), 'b--', label='People Currently Infected')#Lines
+        ax2.plot(xsmooth, spline2(xsmooth), 'r--', label='Total Deaths')
+        #Graph Labels and Length
+        ax1.set_title(f'{self.virus.name} Infection')
+        ax1.set_xlabel('Time Steps')
+        ax1.set_ylabel('People Currently Infected', color='blue')
+        ax2.set_ylabel('Total Deaths', color='red')
+        ax1.set_xlim([0, len(x)-1])
+        ax2.legend(loc='upper left')
         plt.show()
 
 if __name__ == "__main__":
