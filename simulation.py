@@ -177,18 +177,19 @@ class Simulation(object):
         #a chance to get infected
         if random_person.is_vaccinated:
             self.saved_from_vac += 1
-            return 'is_vaccinated'
+            interacted = 'is_vaccinated'
         elif random_person.infection != None:
-            return 'is_not_sick'
+            interacted = 'is_not_sick'
         else:
             infect = random.random()
             if infect <= self.virus.repro_rate:
                 self.newly_infected.append(random_person._id)
-                return 'did_infect'
+                interacted = 'did_infect'
             else:
-                return 'did_not_infect'
-
+                interacted = 'did_not_infect'
+                
         self.logger.log_interaction(person, random_person, interacted)
+        return interacted
 
     def _infect_newly_infected(self):
         ''' This method should iterate through the list of ._id stored in self.newly_infected
