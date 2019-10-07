@@ -14,7 +14,7 @@ class Logger(object):
 
     def text_formatting(self, file_name, message):
         '''The logger uses this method to make doc strings flush with text document'''
-
+        #Removes White space from lines
         with open(self.formatting_name, "w") as logs_f:
             logs_f.writelines(message)
         with open(self.formatting_name, "r") as logs_f:
@@ -23,7 +23,7 @@ class Logger(object):
             for line in lines:
                 if len(line.strip()) > 0:
                     list_lines.append(re.sub(' +', ' ', line).strip())
-
+        #Writing with a new line 
         with open(file_name, "a") as logs:
             for _ in range(2): list_lines.append('')
             logs.writelines('\n'.join(list_lines))

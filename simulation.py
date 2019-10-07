@@ -187,7 +187,7 @@ class Simulation(object):
                 interacted = 'did_infect'
             else:
                 interacted = 'did_not_infect'
-                
+
         self.logger.log_interaction(person, random_person, interacted)
         return interacted
 
@@ -246,7 +246,7 @@ if __name__ == "__main__":
     if len(params) == 6:
         initial_infected = int(params[5])
     else:
-        initial_infected = 10
+        initial_infected = 1
 
     virus = Virus(virus_name, repro_num, mortality_rate)
     sim = Simulation(pop_size, vacc_percentage, virus, initial_infected)
