@@ -208,7 +208,7 @@ class Simulation(object):
         element, last element in y is based off of infect population.
         '''
         #For X and Y Values of Points, als smoothing points
-        x = range(len(plot_y))
+        x = range(time_step + 1)
         y = np.array(plot_y)
         y2 = np.array(plot_y2)
         spline = UnivariateSpline(x, y, s=5)
@@ -222,20 +222,26 @@ class Simulation(object):
         ax2.plot(x, y2, 'o', color='red')
         l1, = ax1.plot(xsmooth, spline(xsmooth), 'b--', label='People Currently Infected')#Lines
         l2, = ax2.plot(xsmooth, spline2(xsmooth), 'r--', label='Total Deaths')
-        #Graph Labels and Length
+        ax1.fill_between(xsmooth, spline(xsmooth), color='blue', alpha=0.5)
+        t1, = ax1.plot([],[], marker='s', color='blue', alpha=0.5, ls="none")#Fake plot line for Total Infected.
+        #Graph Labels
         ax1.set_title(f'Population Size: {self.pop_size}', fontsize=8)
         fig.suptitle(f'{self.virus.name} Infection', fontsize=14)
         ax1.set_xlabel('Time Steps')
         ax1.set_ylabel('People Currently Infected', color='blue')
         ax2.set_ylabel('Total Deaths', color='red')
-        ax1.set_xlim([0, len(x)-1])
-        plt.legend([l1, l2],['People Currently Infected', 'Total Deaths'])
+        #X ticker amount and plot limits
+        ax1.locator_params(integer=True) #Sets X ticker values to int numbers.
+        ax1.set_xlim([0, time_step])
+        ax1.set_ylim(bottom=0)
+        plt.legend([l1, t1, l2],['People Currently Infected', f'Total Infected: {self.total_infected}',
+          'Total Deaths'], loc ='lower center', fontsize ='x-small')
         #Saves and shows graph made
         fig.savefig("Graph_Infected_and_Dead.png")
         plt.show()
 
 if __name__ == "__main__":
-    #python3 simulation.py 4000 0.75 Smallpox 0.15 0.06 5
+    #python3 simulation.py 5000 0.80 Smallpox 0.15 0.06 10
     params = sys.argv[1:]
     pop_size = int(params[0])
     vacc_percentage = float(params[1])
