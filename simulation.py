@@ -95,10 +95,8 @@ class Simulation(object):
         dead_this_step = 0
         time_step_counter = 0
         should_continue = self._simulation_should_continue()
-        plot_y = []
-        plot_y2 = []
-        plot_y.append(self.current_infected)
-        plot_y2.append(self.total_dead)
+        plot_y = [self.current_infected]
+        plot_y2 = [self.total_dead]
         #Runs until there are no more infected people. Only vaccinated or dead.
         while should_continue:
             self.time_step()
@@ -117,7 +115,7 @@ class Simulation(object):
         print(f'The simulation has ended after {time_step_counter} turns.')
         self.logger.log_answers(self.total_dead, self.total_infected,self.virus,
         self.pop_size, self.vacc_percentage, self.initial_infected, self.saved_from_vac)
-        #Opens up Graph for statistic about log and answers
+        #Creates a graph about logs and answers
         self.plot_graph(time_step_counter, plot_y, plot_y2)
 
     def time_step(self):
@@ -175,26 +173,22 @@ class Simulation(object):
         # in as params
         assert person.is_alive == True
         assert random_person.is_alive == True
-        random_person_vacc = None
-        random_person_sick = None
-        did_infect = None
         #Checks if if they are vaccinated, or are already sick. If not they have
         #a chance to get infected
         if random_person.is_vaccinated:
-            random_person_vacc = True
             self.saved_from_vac += 1
+            return 'is_vaccinated'
         elif random_person.infection != None:
-            random_person_sick = True
+            return 'is_not_sick'
         else:
             infect = random.random()
             if infect <= self.virus.repro_rate:
                 self.newly_infected.append(random_person._id)
-                did_infect = True
+                return 'did_infect'
             else:
-                did_infect = False
+                return 'did_not_infect'
 
-        self.logger.log_interaction(person, random_person, random_person_sick,
-        random_person_vacc, did_infect)
+        self.logger.log_interaction(person, random_person, interacted)
 
     def _infect_newly_infected(self):
         ''' This method should iterate through the list of ._id stored in self.newly_infected

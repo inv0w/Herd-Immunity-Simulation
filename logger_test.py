@@ -104,5 +104,5 @@ def test_log_answers():
     with open("answers.txt", "r") as logs:
         lines = []
         lines = logs.readlines()
-    assert lines[0] == f'1. Inputs I gave for the simulation were: Billbonic_Plague 0.8 0.85 400 0.6 10\n'
+    assert lines[0] == f'1. Inputs I gave for the simulation were: 400 0.6 Billbonic_Plague 0.85 0.8 10\n'
     assert lines[3] == f'4. The amount of times someone was saved because they were vaccinated was {sim.saved_from_vac}\n'

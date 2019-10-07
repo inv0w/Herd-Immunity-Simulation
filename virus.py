@@ -5,7 +5,7 @@ class Virus(object):
         self.name = name
         self.repro_rate = repro_rate
         self.mortality_rate = mortality_rate
-        
+
 def test_virus_instantiation():
     '''Check to make sure that the virus instantiator is working.'''
     virus = Virus("Smallpox", 0.06, 0.15)
@@ -20,7 +20,7 @@ def test_not_virus_instantiation():
     assert virus.repro_rate != 0.06
     assert virus.mortality_rate != 0.15
 
-def test_compare_names():
+def test_compare_virus():
     '''Checks to see if multiple Virus Objects can be made'''
     virus1 = Virus("Flu", 0.4, 0.3)
     virus2 = Virus("Plague", 0.9, 0.3)

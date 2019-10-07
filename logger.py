@@ -43,8 +43,7 @@ class Logger(object):
         with open(self.file_name, "a") as logs_f:
             logs_f.write("Beginning step 1\n\n")
 
-    def log_interaction(self, person, random_person, random_person_sick,
-        random_person_vacc, did_infect):
+    def log_interaction(self, person, random_person, interacted):
         '''
         The Simulation object should use this method to log every interaction
         a sick person has during each time step.
@@ -55,20 +54,20 @@ class Logger(object):
             "{person.ID} didn't infect {random_person.ID} because {'vaccinated' or 'already sick'} \n"
         '''
         #Different Case responses
-        is_infected = f"{person._id} infected {random_person._id}. \n"
-        is_not_infected = f"{person._id} didn't infect {random_person._id} because they got lucky!\n"
         is_vaccinated = f"{person._id} didn't infect {random_person._id} because they were vaccinated.\n"
         is_already_sick = f"{person._id} didn't infect {random_person._id} because they were already sick.\n"
+        is_infected = f"{person._id} infected {random_person._id}. \n"
+        is_not_infected = f"{person._id} didn't infect {random_person._id} because they got lucky!\n"
 
         #Booleans Declared by interaction in Simulation
         with open(self.file_name, "a") as logs:
-            if random_person_vacc:
+            if interacted == 'is_vaccinated':
                 logs.write(is_vaccinated)
-            elif random_person_sick:
+            elif interacted == 'is_not_sick':
                 logs.write(is_already_sick)
-            elif did_infect:
+            elif interacted == 'did_infect':
                 logs.write(is_infected)
-            elif not did_infect:
+            elif interacted == 'did_not_infect':
                 logs.write(is_not_infected)
 
     def log_infection_survival(self, person):

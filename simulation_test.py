@@ -31,6 +31,15 @@ def test_simulation_should_continue():
     sim.current_infected = 0
     assert sim._simulation_should_continue() is False
 
+def test_interaction():
+    virus = Virus("Smallpox", 0.06, 0.15)
+    sim = Simulation(100, 0.90, virus)
+    person = Person(1, False, infection=virus)
+    random_person = Person(2, True, None)
+    random_person2 = Person(3, False, infection=virus)
+    assert sim.interaction(person, random_person) == 'is_vaccinated'
+    assert sim.interaction(person, random_person2) == 'is_not_sick'
+
 def test_infect_newly_infected():
     virus = Virus("Smallpox", 0.06, 0.15)
     sim = Simulation(100, 0.90, virus)
@@ -39,3 +48,6 @@ def test_infect_newly_infected():
     sim.newly_infected.append(person1._id)
     sim._infect_newly_infected()
     assert person1.infection == virus
+
+def test_plot_graph():
+    pass

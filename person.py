@@ -47,7 +47,6 @@ def test_vacc_person_instantiation():
 
 def test_not_vacc_person_instantiation():
     person = Person(2, False)
-
     assert person._id == 2
     assert person.is_vaccinated is False
 
@@ -73,4 +72,3 @@ def test_did_survive_infection():
         assert person.is_alive is False
         assert person.is_vaccinated is True
         assert person.infection is None
-        pass
