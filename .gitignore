@@ -136,7 +136,7 @@ dmypy.json
 .pyre/
 
 #Log Files for Herd Immunity
-.logs.txt
-.logs_formatting.txt
+logs.txt
+logs_formatting.txt
 
 # End of https://www.gitignore.io/api/macos,python
