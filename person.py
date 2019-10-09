@@ -72,3 +72,18 @@ def test_did_survive_infection():
         assert person.is_alive is False
         assert person.is_vaccinated is True
         assert person.infection is None
+
+def test_did_survive_infection_2():
+    virus = Virus("Goblin", 0.2, 0.9)
+    person = Person(1, False, infection=virus)
+    # Resolve whether the Person survives the infection or not
+    survived = person.did_survive_infection()
+    # Check if the Person survived or not
+    if survived:
+        assert person.is_alive is True
+        assert person.is_vaccinated is True
+        assert person.infection is None
+    else:
+        assert person.is_alive is False
+        assert person.is_vaccinated is True
+        assert person.infection is None

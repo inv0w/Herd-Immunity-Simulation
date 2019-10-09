@@ -135,9 +135,10 @@ class Simulation(object):
         #If the random person isn't alive, we loop again without adding to interaction counter
         for person in self.population:
             if person.infection == self.virus and person.is_alive:
+                # person_id = person.id
                 while total_interactions < 100:
                     random_person = random.choice(self.population)
-                    if random_person.is_alive:
+                    if random_person.is_alive and random_person._id != person._id:
                         total_interactions += 1
                         self.interaction(person, random_person)
                 total_interactions = 0
@@ -204,8 +205,8 @@ class Simulation(object):
         self.newly_infected = []
 
     def plot_graph(self, time_step, plot_y, plot_y2):
-        '''Makes a graph using matplotlib. Takes in final step counter as last x
-        element, last element in y is based off of infect population.
+        '''Makes a graph using matplotlib. Takes in final step counter as x
+        element, and the y value is the total amount of deaths or currently infected.
         '''
         #For X and Y Values of Points, als smoothing points
         x = range(time_step + 1)
