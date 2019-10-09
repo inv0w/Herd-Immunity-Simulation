@@ -211,7 +211,7 @@ class Simulation(object):
         x = range(time_step + 1)
         y = np.array(plot_y)
         y2 = np.array(plot_y2)
-        spline = UnivariateSpline(x, y, s=5)
+        spline = UnivariateSpline(x, y, s=2)
         spline2 = UnivariateSpline(x, y2, s=5)
         xsmooth = np.linspace(0, time_step, 500)
         #Creates different sublots for variable output to logs.
@@ -234,6 +234,7 @@ class Simulation(object):
         ax1.locator_params(integer=True) #Sets X ticker values to int numbers.
         ax1.set_xlim([0, time_step])
         ax1.set_ylim(bottom=0)
+        ax2.set_ylim(bottom=0)
         plt.legend([l1, t1, l2],['People Currently Infected', f'Total Infected: {self.total_infected}',
           'Total Deaths'], loc ='lower center', fontsize ='x-small')
         #Saves and shows graph made
