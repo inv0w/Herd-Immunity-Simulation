@@ -212,8 +212,8 @@ class Simulation(object):
         x = range(time_step + 1)
         y = np.array(plot_y)
         y2 = np.array(plot_y2)
-        spline = UnivariateSpline(x, y, s=5)
-        spline2 = UnivariateSpline(x, y2, s=5)
+        spline = UnivariateSpline(x, y, s=3)
+        spline2 = UnivariateSpline(x, y2, s=3)
         xsmooth = np.linspace(0, time_step, 500)
         #Creates different sublots for variable output to logs.
         fig, ax1 = plt.subplots()
